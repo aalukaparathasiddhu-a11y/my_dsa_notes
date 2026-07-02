@@ -32,4 +32,11 @@ bool searchele(Node* head,int target){
     return false;
 }
 
-//inserting element in linked list
+//inserting element in linked list at begining
+Node* insertatbegin(Node* head,int new_ele){
+    Node* newnode= new Node(new_ele);//pointing nullptr
+newnode->next=head;
+head=newnode;
+return head;//returns head of new linked list
+}
+

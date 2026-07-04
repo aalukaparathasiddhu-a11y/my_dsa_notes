@@ -94,3 +94,124 @@ Node* deleteNode(Node* head, int target) {
     return head;
 }
 
+//reversing a linked list
+Node* revll(Node* head){
+    Node* temp=head;
+    stack<int> st;
+    while(temp!=nullptr){
+        st.push(temp->data);
+        temp=temp->next;
+    }
+    temp=head;
+    while(temp!=nullptr){
+        temp->data=st.top();
+        st.pop();
+        temp=temp->next;
+    }
+    return head;
+
+}
+
+
+Node*revell(Node* head){
+Node* temp=head,*front=head->next,*prev=nullptr;
+while(temp!=nullptr){
+front=temp->next;
+temp->next=prev;
+prev=temp;
+temp=front;
+
+}
+
+}
+
+//detecting cycle in linked list nd detecting starting point
+ Node *detectCycle(Node *head) {
+        if (head == nullptr || head->next == nullptr) return nullptr;
+        
+        Node* slow = head;
+        Node* fast = head;
+        bool hasCycle = false;
+        
+        // Step 1: Determine if a cycle exists
+        while (fast != nullptr && fast->next != nullptr) {
+            slow = slow->next;
+            fast = fast->next->next;
+            
+            if (slow == fast) {
+                hasCycle = true;
+                break;
+            }
+        }
+        
+        // If we exited the loop and found no cycle, return nullptr
+        if (!hasCycle) return nullptr;
+        
+        // Step 2: Find the entry point of the cycle
+        slow = head;
+        while (slow != fast) {
+            slow = slow->next;
+            fast = fast->next; // Both move at the same speed now
+        }
+        
+        return slow;
+    }
+
+    //finding lenght of cycle in ll
+    int lenght(Node*head){
+Node* temp=detectCycle(head);
+if(temp==nullptr)return 0;
+Node* moving=temp->next;
+int count =1;
+while(moving!=temp){
+    moving=moving->next;
+    count++;
+}
+return count;
+    }
+
+    //palindrome--O(n)S(n)
+bool ispali(Node* head){
+    stack<int>st;
+    Node* temp=head;
+    while(temp!=nullptr){
+        st.push(temp->data);
+        temp=temp->next;
+    }
+    temp=head;
+    while(temp!=nullptr){
+        if(temp->data!=st.top())return false;
+        temp=temp->next;
+        st.pop();
+    }
+    return true;
+}
+bool palin(Node* head){
+   
+        Node *slow = head, *fast = head, *prev, *temp;
+        while (fast && fast->next)
+            slow = slow->next, fast = fast->next->next;//finding middle
+        prev = slow, slow = slow->next, prev->next = NULL;
+        while (slow)
+            temp = slow->next, slow->next = prev, prev = slow, slow = temp;
+        fast = head, slow = prev;
+        while (slow)
+            if (fast->data != slow->data) return false;
+            else fast = fast->next, slow = slow->next;
+        return true;
+    
+}
+
+//sorting odd and even index;
+Node* oell(Node* head){
+    Node* tmp2=head->next;
+    Node *temp=head,*eve=head->next;
+    while(eve->next!=nullptr && eve!=nullptr){
+        temp->next=eve->next;
+        temp=temp->next;
+        eve->next=temp->next;
+eve=eve->next;
+    }
+    temp->next=tmp2;
+    return head;
+}

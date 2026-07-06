@@ -215,3 +215,114 @@ eve=eve->next;
     temp->next=tmp2;
     return head;
 }
+
+//adding one to number
+Node* add1(Node* head) {
+    if (head == nullptr) return new Node(1); // Handle empty list edge case
+
+    // 1. Reverse the list to start adding from the least significant digit
+    Node* reversedHead = revell(head);
+    Node* temp = reversedHead;
+    Node* prev = nullptr; // Track previous node to handle a brand new head (e.g., 999 -> 1000)
+    
+    int carry = 1; // Start with a carry of 1 because we want to add 1
+    
+    // 2. Traverse and add the carry
+    while (temp != nullptr) {
+        int sum = temp->data + carry;
+        temp->data = sum % 10;  // Becomes 0 if sum is 10
+        carry = sum / 10;       // Becomes 1 if sum is 10
+        
+        prev = temp;            // Save current node before moving on
+        temp = temp->next;
+        
+        // Optimization: If there's no more carry, we can stop early!
+        if (carry == 0) break;
+    }
+    
+    // 3. If there is still a carry left (e.g., 999 + 1), attach a new node at the end
+    if (carry > 0) {
+        prev->next = new Node(carry);
+    }
+    
+    // 4. Reverse the list back to its original order and return
+    return revell(reversedHead);
+}
+//adding one through recurssion
+int helper(Node* temp){
+    if(temp==nullptr)return 1;
+    int carry=helper(temp->next);
+    temp->data=temp->data +carry;
+    if(temp->data<10) return 0;
+    temp->data=0;
+    return 1; 
+
+}
+Node* addi1(Node*head,int carry){
+   int carry=helper(head);
+    if(carry==1){
+        Node* newh=new Node(0);
+        newh->next=head;
+        return newh;
+    }
+    else return head;
+}
+
+//sort linked list of 0,1,2
+Node* sort012(Node* head){
+    if(head==nullptr ||head->next==nullptr)return head;
+    Node* dummy0=new Node(-1);
+    Node* dummy1=new Node(-1);
+    Node* dummy2=new Node(-1);
+    Node* temp=head;
+    Node* zero=dummy0,*one=dummy1,*two=dummy2;
+    while(temp!=nullptr){
+        if(temp->data==0){ zero->next=temp;
+        zero=temp;
+        }
+        if(temp->data==1){ one->next=temp;
+        one=temp;
+        }
+        if(temp->data==2){ two->next=temp;
+        two=temp;
+        }
+        temp=temp->next;
+
+    }
+    zero->next=(dummy1->next)?dummy1->next:dummy2->next;
+    one->next=dummy2->next;
+    two->next=nullptr;
+  Node* newHead = dummy0->next;
+    
+    delete dummy0;
+    delete dummy1;
+    delete dummy2;
+    
+    return newHead;
+}
+
+//finding node of intersection of y linked list
+
+//brutee force store link list 1 in hash and then find if it is there in hasmap by 2
+//better- find lenght,travel larger  by l2-l1 then travel simultaneously
+
+ Node* Yintersection(Node* head1, Node* head2) {
+    if (head1 == nullptr || head2 == nullptr) return nullptr;
+    
+    Node* temp1 = head1;
+    Node* temp2 = head2;
+    
+    while (temp1 != temp2) {
+        // If temp1 reaches the end, redirect it to the head of the OTHER list.
+        // Otherwise, just move to the next node.
+        temp1 = (temp1 == nullptr) ? head2 : temp1->next;
+        
+        // Do the exact same for temp2.
+        temp2 = (temp2 == nullptr) ? head1 : temp2->next;
+    }
+    
+    // If they intersect, temp1 will be the intersection node.
+    // If they don't intersect, both will eventually become nullptr at the same time,
+    // breaking the loop, and we safely return nullptr.
+    return temp1;
+}

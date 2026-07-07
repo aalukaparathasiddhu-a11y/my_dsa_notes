@@ -33,3 +33,35 @@ current=current->prev;
     if(temp!=nullptr)head=temp->prev;
     return head;
 }
+//delete occurence
+class Solution {
+public:
+    ListNode * deleteAllOccurrences(ListNode* head, int target) {
+if(head==nullptr)return nullptr;
+ListNode* dummy=new ListNode(0,head,nullptr);
+head->prev=dummy;
+
+ListNode* temp=head;
+while(temp!=nullptr){
+   
+    if(temp->val==target){
+         ListNode* du=temp;
+         temp->prev->next=temp->next;
+        if(temp->next)temp->next->prev=temp->prev;
+        
+        temp=temp->next;
+        delete du;
+
+    }
+    else temp=temp->next;
+    
+}
+ListNode* newHead = dummy->next;
+        if (newHead != nullptr) {
+            newHead->prev = nullptr; // Detach dummy
+        }
+        
+        delete dummy; 
+        return newHead;
+    }
+};
